@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LocationHandler {
-    static List<String> addressList = new ArrayList<String>();
+    static Map<String,Integer> addressMap = new HashMap<String,Integer>();
     static String UIRTByBlockCountFilePath = "/Users/suhao/Desktop/uirtByBlockCount.txt";
     private static double minLng = 112.0;
     private static double maxLng = 120.0;
@@ -52,18 +52,19 @@ public class LocationHandler {
                 String detailLocation = tempStringArray[tempStringArray.length-1].trim();
                 String parkName = tempStringArray[tempStringArray.length-2].trim();
                 String address = getAddress(detailLocation, parkName);
-                if(!addressList.contains(address)){
+
+                if(!addressMap.keySet().contains(address)){
                     try {
                         Double[] doubles = HttpClientExample.sendGet(address);
                         if(doubles[0].equals(0.0) && doubles[1].equals(0.0)){
-                            addressList.add(address);
+                            addressMap.put(address,-1);
                             continue;
                         }
                         if(doubles[0] < minLng || doubles[0] > maxLng){
-                            addressList.add(address);
+                            addressMap.put(address,-1);
                             continue;
                         }else if(doubles[1] < minLat || doubles[1] > maxLat){
-                            addressList.add(address);
+                            addressMap.put(address,-1);
                             continue;
                         }
                         blockCount = (int)getBlock(doubles[0], doubles[1], modeMap);
@@ -75,10 +76,10 @@ public class LocationHandler {
                 for(int i = 0; i < tempStringArray.length - 2; i++){
                     bufferedWriter.write(tempStringArray[i] + ",");
                 }
-                bufferedWriter.write(String.valueOf(blockCount));
+                addressMap.put(address,blockCount);
+                bufferedWriter.write(addressMap.get(address).toString());
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
-                addressList.add(address);
             }
             reader.close();
         } catch (IOException e) {
