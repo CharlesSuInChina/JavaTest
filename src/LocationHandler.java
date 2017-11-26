@@ -4,14 +4,16 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LocationHandler {
     static Map<String,Integer> addressMap = new HashMap<String,Integer>();
-    static String UIRTByBlockCountFilePath = "/Users/suhao/Desktop/uirtByBlockCount.txt";
+    static String UIRTByBlockCountFilePath = "result/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + "uirtByBlockCount.txt";
     private static double minLng = 112.0;
     private static double maxLng = 120.0;
     private static double minLat = 35.0;
@@ -23,7 +25,7 @@ public class LocationHandler {
         Map<String, Double> modeMap = new LocationHandler().getBlockMode(minLng, minLat, maxLng, maxLat, 50.0);
         System.out.println(modeMap.toString());
         // first step read uirt.txt
-        new LocationHandler().readFileByLines("/Users/suhao/Desktop/uirt(3).txt", modeMap);
+        new LocationHandler().readFileByLines("source/uirt(3).txt", modeMap);
         System.out.println("the request count is : " + HttpClientExample.requestCount);
     }
 
