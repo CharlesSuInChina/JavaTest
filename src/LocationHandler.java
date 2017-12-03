@@ -18,11 +18,12 @@ public class LocationHandler {
     private static double maxLng = 120.0;
     private static double minLat = 35.0;
     private static double maxLat = 43.0;
+    private static double stepSize = 50.0; // km
 
 
     public static void main(String[] args){
         //calculate block
-        Map<String, Double> modeMap = new LocationHandler().getBlockMode(minLng, minLat, maxLng, maxLat, 50.0);
+        Map<String, Double> modeMap = new LocationHandler().getBlockMode(minLng, minLat, maxLng, maxLat);
         System.out.println(modeMap.toString());
         // first step read uirt.txt
         new LocationHandler().readFileByLines("source/uirt(3).txt", modeMap);
@@ -127,11 +128,16 @@ public class LocationHandler {
         return parkNameIndetailLocation;
     }
 
-    private Map<String, Double> getBlockMode(Double minLng, Double minLat, Double maxLng, Double maxLat,Double stepSize){
+    private Double calculateStepSizeLng(Double lat){
         //calculate lng step size(degree)
-        Double cosValue = Math.cos(2 * Math.PI * minLat / 360.0);
+        Double cosValue = Math.cos(2 * Math.PI * lat / 360.0);
         Double lngKmPerDu = 111.314 * cosValue;
         Double stepSizeLng = stepSize / lngKmPerDu;
+        return  stepSizeLng;
+    }
+
+    private Map<String, Double> getBlockMode(Double minLng, Double minLat, Double maxLng, Double maxLat){
+        Double stepSizeLng = calculateStepSizeLng(minLat);
 
         //calculate lat step size(degree)
         Double stepSizeLat = stepSize / 110.95;
@@ -145,7 +151,6 @@ public class LocationHandler {
         resultMap.put("minLat", minLat);
         resultMap.put("maxLng", maxLng);
         resultMap.put("maxLat", maxLat);
-        resultMap.put("stepSizeLng", stepSizeLng);
         resultMap.put("stepSizeLat", stepSizeLat);
         resultMap.put("lngDiffCount", lngDiffCount);
         return resultMap;
@@ -154,7 +159,7 @@ public class LocationHandler {
     private double getBlock(Double lng, Double lat, Map<String, Double> map){
         Double minLng = map.get("minLng");
         Double minLat = map.get("minLat");
-        Double stepSizeLng = map.get("stepSizeLng");
+        Double stepSizeLng = calculateStepSizeLng(lat);
         Double stepSizeLat = map.get("stepSizeLat");
         Double lngDiffCount = map.get("lngDiffCount");
 
