@@ -58,7 +58,7 @@ public class LocationHandler {
 
                 if(!addressMap.keySet().contains(address)){
                     try {
-                        Double[] doubles = HttpClientExample.sendGet(address);
+                        Double[] doubles = HttpClientExample.sendGet(address);//调用百度API
                         if(doubles[0].equals(0.0) && doubles[1].equals(0.0)){
                             addressMap.put(address,-1);
                             continue;
@@ -160,7 +160,7 @@ public class LocationHandler {
     private double getBlock(Double lng, Double lat, Map<String, Double> map){
         Double minLng = map.get("minLng");
         Double minLat = map.get("minLat");
-        Double stepSizeLng = calculateStepSizeLng(lat);
+        Double stepSizeLng = calculateStepSizeLng(lat);//计算经度的步长
         Double stepSizeLat = map.get("stepSizeLat");
         Double lngDiffCount = map.get("lngDiffCount");
 
