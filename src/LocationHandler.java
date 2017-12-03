@@ -130,7 +130,8 @@ public class LocationHandler {
 
     private Double calculateStepSizeLng(Double lat){
         //calculate lng step size(degree)
-        Double cosValue = Math.cos(2 * Math.PI * lat / 360.0);
+        Double radians = Math.toRadians(lat);//转成弧度
+        Double cosValue = Math.cos(radians);
         Double lngKmPerDu = 111.314 * cosValue;
         Double stepSizeLng = stepSize / lngKmPerDu;
         return  stepSizeLng;
