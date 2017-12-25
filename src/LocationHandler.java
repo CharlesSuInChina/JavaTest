@@ -23,7 +23,7 @@ public class LocationHandler {
     private static double maxLng = 123.0;
     private static double minLat = 31.0;
     private static double maxLat = 43.0;
-    private static double stepSize = 200.0; // km
+    private static double stepSize = 150.0; // km
     static String UIRTByBlockCountFilePath = "result/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + stepSize + "uirtBlock.txt";
 
     public static void main(String[] args){
@@ -69,6 +69,7 @@ public class LocationHandler {
                             addressMap.put(address,-1);
                             continue;
                         }
+                        //删除异常数据
                         if(doubles[0] < minLng || doubles[0] > maxLng){
                             addressMap.put(address,-1);
                             continue;
@@ -111,15 +112,18 @@ public class LocationHandler {
         String parkNameIndetailLocation = "";
 
         parkNameIndetailLocation = checkParkNameIndetailLocation(detailLocation);
-        if(parkNameIndetailLocation.equals("")){
-            countyName = checkCountyName(detailLocation);
-            if(countyName.equals("")){
-                cityName = checkCityName(detailLocation);
-                if(cityName.equals("")){
-                    provinceName = checkProvinceName(detailLocation);
-                }
-            }
-        }
+        countyName = checkCountyName(detailLocation);
+        cityName = checkCityName(detailLocation);
+        provinceName = checkProvinceName(detailLocation);
+//        if(parkNameIndetailLocation.equals("")){
+//            countyName = checkCountyName(detailLocation);
+//            if(countyName.equals("")){
+//                cityName = checkCityName(detailLocation);
+//                if(cityName.equals("")){
+//                    provinceName = checkProvinceName(detailLocation);
+//                }
+//            }
+//        }
 
         String address = provinceName + cityName + countyName + parkNameIndetailLocation + parkName;
         System.out.println(address);
@@ -128,8 +132,20 @@ public class LocationHandler {
 
     private String checkParkNameIndetailLocation(String detailLocation){
         String parkNameIndetailLocation = "";
-        if(detailLocation.contains("野三坡")){
-            parkNameIndetailLocation = "野三坡，";
+        if(detailLocation.contains("野三坡")&& detailLocation.contains("白草畔")){
+            parkNameIndetailLocation = "野三坡，白草畔景区，";
+        }else if(detailLocation.contains("野三坡")&& detailLocation.contains("百里峡")){
+            parkNameIndetailLocation = "野三坡，百里峡风景区，";
+        }else if(detailLocation.contains("野三坡")&& detailLocation.contains("景区中部")){
+            parkNameIndetailLocation = "野三坡，景区中部，";
+        }else if(detailLocation.contains("野三坡")&& detailLocation.contains("龙门天关景区")){
+            parkNameIndetailLocation = "野三坡，龙门天关景区，";
+        }else if(detailLocation.contains("野三坡")&& detailLocation.contains("檀木沟景区")){
+            parkNameIndetailLocation = "野三坡，檀木沟景区，";
+        }else if(detailLocation.contains("野三坡")&& detailLocation.contains("鱼骨洞")){
+            parkNameIndetailLocation = "野三坡，鱼骨洞景区，";
+        }else if(detailLocation.contains("东水关街23号")){
+            parkNameIndetailLocation = "东水关街23号，";
         }
         return parkNameIndetailLocation;
     }
