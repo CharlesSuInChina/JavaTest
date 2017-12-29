@@ -23,20 +23,24 @@ public class LocationHandler {
     private static double maxLng = 123.0;
     private static double minLat = 31.0;
     private static double maxLat = 43.0;
-    private static double stepSize = 150.0; // km
-    static String UIRTByBlockCountFilePath = "result/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + stepSize + "uirtBlock.txt";
+    private static double stepSize; // km
 
     public static void main(String[] args){
+        stepSize = Double.valueOf(args[0]);
+
         //calculate block
         Map<String, Double> modeMap = new LocationHandler().getBlockMode(minLng, minLat, maxLng, maxLat);
         System.out.println(modeMap.toString());
+        String UIRTByBlockCountFilePath = "result/" + new SimpleDateFormat("yyyyMMddHHmm").format(new Date()) + "-"+stepSize + ".txt";
         // first step read uirt.txt
        // new LocationHandler().readFileByLines("source/uirt(3).txt", modeMap);
-        new LocationHandler().readFileByLines("source/uirtAllLo.txt", modeMap);
+        new LocationHandler().readFileByLines("source/uirtAllLo.txt", modeMap,UIRTByBlockCountFilePath);
         System.out.println("the request count is : " + HttpClientExample.requestCount);
+        System.out.println("横向分割数："+modeMap.get("lngDiffCount"));
+        System.out.println("纵向分割数："+modeMap.get("latCount"));
     }
 
-    public void readFileByLines(String fileName, Map<String, Double> modeMap) {
+    public void readFileByLines(String fileName, Map<String, Double> modeMap,String UIRTByBlockCountFilePath) {
         File file = new File(fileName);
         BufferedReader reader = null;
         BufferedWriter bufferedWriter = null;
@@ -162,6 +166,7 @@ public class LocationHandler {
         resultMap.put("maxLat", maxLat);
         resultMap.put("stepSizeLat", stepSizeLat);//纬度步长
         resultMap.put("lngDiffCount", lngDiffCount);//横向块数
+        resultMap.put("latCount", latCount);//纵向块数
         return resultMap;
     }
 
