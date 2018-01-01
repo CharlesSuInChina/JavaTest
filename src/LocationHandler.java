@@ -26,6 +26,7 @@ public class LocationHandler {
     private static double stepSize; // km
 
     public static void main(String[] args){
+
         stepSize = Double.valueOf(args[0]);
 
         //calculate block
